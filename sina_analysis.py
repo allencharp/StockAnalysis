@@ -1,10 +1,11 @@
-analURL = "http://vip.stock.finance.sina.com.cn/q/go.php/vReport_List/kind/company/index.phtml"
+analURL = "http://vip.stock.finance.sina.com.cn/q/go.php/vReport_List/kind/company/index.phtml?p={}"
 
 import tushare_wrapper as tuw
-import pyquery as py
-#import
+from pyquery import PyQuery as pq
+import requests
+
+resPyQuery = pq(requests.get(analURL.format(1)).content)
+
+print(resPyQuery)
 
 
-result = tuw.get_stock_rate('601988','2017/01/01',30)
-
-print(result)
