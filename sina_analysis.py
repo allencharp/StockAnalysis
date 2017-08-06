@@ -1,5 +1,3 @@
-
-
 import tushare_wrapper as tuw
 from pyquery import PyQuery as pq
 import pymysql
@@ -19,8 +17,13 @@ class SinaStockModel:
 class SinaData:
 
     def __init__(self):
+        config = open('config.txt').readlines()
+        db_user = str(config[0][config[0].index('=')+1:]).strip()
+        db_password = str(config[1][config[1].index('=')+1:]).strip()
+        print(db_user)
+        print(db_password)
         self.analURL = "http://vip.stock.finance.sina.com.cn/q/go.php/vIR_RatingNewest/index.phtml?p={0}"
-        self.conn = pymysql.connect(host="127.0.0.1", user='root', password='355585', db='allen')
+        self.conn = pymysql.connect(host="127.0.0.1", user=db_user, password=db_password, db='allen')
         self.cursor = self.conn.cursor()
         self.conn.set_charset('utf8')
         self.cursor.execute('SET NAMES utf8;')
@@ -59,4 +62,4 @@ class SinaData:
 
 
 sina = SinaData()
-sina.ReadData()
+#sina.ReadData()
