@@ -21,6 +21,5 @@ class SinaAnalysis:
             print(tuw.get_stock_rate(str(item)[2:8], date.replace('-','/'), workdays=10))
 
 
-
 sina = SinaAnalysis()
 sina.GetSpecificDateStockUpData('2017-07-28')

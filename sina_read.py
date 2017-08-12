@@ -2,6 +2,7 @@
 from pyquery import PyQuery as pq
 import pymysql
 import gevent
+import datetime
 
 class SinaStockModel:
 
@@ -18,7 +19,7 @@ class SinaStockModel:
 class SinaData:
 
     def __init__(self):
-        config = open('config.txt').readlines()
+        config = open('/Users/allen/desktop/stock/config.txt').readlines()
         db_user = str(config[0][config[0].index('=')+1:]).strip()
         db_password = str(config[1][config[1].index('=')+1:]).strip()
 
@@ -36,7 +37,7 @@ class SinaData:
 
 
     def ReadData(self):
-        jobs = [gevent.spawn(self.ReadPageData, page) for page in range(1,100)]
+        jobs = [gevent.spawn(self.ReadPageData, page) for page in range(1,20)]
         gevent.joinall(jobs)
 
     def ReadPageData(self, page):
@@ -52,7 +53,8 @@ class SinaData:
             item.analyst = (stock_info("td").eq(13 * i + 5).text().encode("latin1").decode('gbk'))
             item.market = (stock_info("td").eq(13 * i + 6).text().encode("latin1").decode('gbk'))
             item.date_time = (stock_info("td").eq(13 * i + 7).text())
-            self.SaveData(item)
+            if item.date_time == datetime.datetime.now().strftime("%Y-%m-%d"):
+                self.SaveData(item)
 
         self.conn.commit()
 
