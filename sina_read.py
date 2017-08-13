@@ -37,7 +37,7 @@ class SinaData:
 
 
     def ReadData(self):
-        jobs = [gevent.spawn(self.ReadPageData, page) for page in range(1,20)]
+        jobs = [gevent.spawn(self.ReadPageData, page) for page in range(1,200)]
         gevent.joinall(jobs)
 
     def ReadPageData(self, page):
@@ -53,8 +53,8 @@ class SinaData:
             item.analyst = (stock_info("td").eq(13 * i + 5).text().encode("latin1").decode('gbk'))
             item.market = (stock_info("td").eq(13 * i + 6).text().encode("latin1").decode('gbk'))
             item.date_time = (stock_info("td").eq(13 * i + 7).text())
-            if item.date_time == datetime.datetime.now().strftime("%Y-%m-%d"):
-                self.SaveData(item)
+            #if item.date_time == datetime.datetime.now().strftime("%Y-%m-%d"):
+            self.SaveData(item)
 
         self.conn.commit()
 
