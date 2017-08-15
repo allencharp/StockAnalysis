@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 import xml.etree.ElementTree as ET
-
+import time
 app = Flask(__name__)
 
 
@@ -18,15 +18,14 @@ def getMessage():
     webData = request.data
 
     recMsg = parse_xml(webData)
-    if isinstance(recMsg, receive.Msg) and recMsg.MsgType == 'text':
+    if recMsg.MsgType == 'text':
         toUser = recMsg.FromUserName
         fromUser = recMsg.ToUserName
-        content = "test"
+        content = recMsg.Content
         replyMsg = TextMsg(toUser, fromUser, content)
         return replyMsg.send()
     else:
-        print
-        "暂且不处理"
+        print("暂且不处理")
         return "success"
 
 
@@ -36,7 +35,7 @@ def parse_xml(web_data):
     xmlData = ET.fromstring(web_data)
     msg_type = xmlData.find('MsgType').text
     if msg_type == 'text':
-        return TextMsg(xmlData)
+        return TextMsg(xmlData.find('FromUserName').text, xmlData.find('ToUserName').text, "hellworld")
     elif msg_type == 'image':
         return ImageMsg(xmlData)
 
@@ -51,23 +50,22 @@ class Msg(object):
 
 class TextMsg(Msg):
     def __init__(self, toUserName, fromUserName, content):
-        self.__dict = dict()
-        self.__dict['ToUserName'] = toUserName
-        self.__dict['FromUserName'] = fromUserName
-        self.__dict['CreateTime'] = int(time.time())
-        self.__dict['Content'] = content
-
+        self.ToUserName = toUserName
+        self.FromUserName = fromUserName
+        self.CreateTime = int(time.time())
+        self.Content = content
+        self.MsgType = 'text'
     def send(self):
         XmlForm = """
         <xml>
-        <ToUserName><![CDATA[{ToUserName}]]></ToUserName>
-        <FromUserName><![CDATA[{FromUserName}]]></FromUserName>
-        <CreateTime>{CreateTime}</CreateTime>
+        <ToUserName><![CDATA[{0}]]></ToUserName>
+        <FromUserName><![CDATA[{1}]]></FromUserName>
+        <CreateTime>{2}</CreateTime>
         <MsgType><![CDATA[text]]></MsgType>
-        <Content><![CDATA[{Content}]]></Content>
+        <Content><![CDATA[{3}]]></Content>
         </xml>
         """
-        return XmlForm.format(**self.__dict)
+        return XmlForm.format(self.ToUserName, self.FromUserName, self.CreateTime, self.Content)
 
 
 class ImageMsg(Msg):
