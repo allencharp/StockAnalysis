@@ -19,7 +19,7 @@ class SinaStockModel:
 class SinaData:
 
     def __init__(self):
-        config = open('/Users/allen/desktop/stock/config.txt').readlines()
+        config = open('config.txt').readlines()
         db_user = str(config[0][config[0].index('=')+1:]).strip()
         db_password = str(config[1][config[1].index('=')+1:]).strip()
 

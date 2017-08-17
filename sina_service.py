@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import Response, make_response
 import xml.etree.ElementTree as ET
 import time
 app = Flask(__name__)
@@ -18,12 +19,13 @@ def getMessage():
     webData = request.data
 
     recMsg = parse_xml(webData)
+    print(recMsg.ToUserName)
+    print(recMsg.FromUserName)
     if recMsg.MsgType == 'text':
-        toUser = recMsg.FromUserName
-        fromUser = recMsg.ToUserName
-        content = recMsg.Content
-        replyMsg = TextMsg(toUser, fromUser, content)
-        return replyMsg.send()
+        print(recMsg.send())
+        r = make_response(recMsg.send())
+        r.content_type='application/xml'
+        return r
     else:
         print("暂且不处理")
         return "success"
@@ -35,7 +37,7 @@ def parse_xml(web_data):
     xmlData = ET.fromstring(web_data)
     msg_type = xmlData.find('MsgType').text
     if msg_type == 'text':
-        return TextMsg(xmlData.find('FromUserName').text, xmlData.find('ToUserName').text, "hellworld")
+        return TextMsg(xmlData.find('FromUserName').text, xmlData.find('ToUserName').text, xmlData.find('Content').text)
     elif msg_type == 'image':
         return ImageMsg(xmlData)
 
@@ -49,7 +51,7 @@ class Msg(object):
 
 
 class TextMsg(Msg):
-    def __init__(self, toUserName, fromUserName, content):
+    def __init__(self, fromUserName, toUserName, content):
         self.ToUserName = toUserName
         self.FromUserName = fromUserName
         self.CreateTime = int(time.time())
@@ -63,9 +65,10 @@ class TextMsg(Msg):
         <CreateTime>{2}</CreateTime>
         <MsgType><![CDATA[text]]></MsgType>
         <Content><![CDATA[{3}]]></Content>
+        <MsgId>1234567890123456</MsgId>
         </xml>
         """
-        return XmlForm.format(self.ToUserName, self.FromUserName, self.CreateTime, self.Content)
+        return XmlForm.format(self.FromUserName, self.ToUserName, int(time.time()), self.Content)
 
 
 class ImageMsg(Msg):
