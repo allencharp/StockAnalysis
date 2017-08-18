@@ -4,7 +4,7 @@ save the stock into mysql
 
 Second, analysis the data with tushare, to see which analysist's forcast get the most profitable stock
 
-Third, use weixin public account, setup a simple webservice to interactive with users
+Third, use weixin public account, setup a simple webservice to interactive with users ( some chatbot ? )
 
 ------------------------------
 
