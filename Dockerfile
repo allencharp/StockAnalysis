@@ -1,5 +1,4 @@
 FROM ubuntu:14.04
-MAINTAINER Michael Twomey, mick@twomeylee.name
 
 RUN echo "deb http://ppa.launchpad.net/fkrull/deadsnakes/ubuntu trusty main" > /etc/apt/sources.list.d/deadsnakes.list \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DB82666C
