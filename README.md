@@ -9,7 +9,7 @@ Third, use weixin public account, setup a simple webservice with flask to intera
 ------------------------------
 
 
-requesities:
+technologies:
 
 python3
 
