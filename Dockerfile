@@ -10,6 +10,7 @@ RUN apt-get update \
     ca-certificates \
     gcc \
     git \
+    vim \
     libpq-dev \
     make \
     mercurial \
@@ -22,6 +23,7 @@ RUN apt-get update \
     && apt-get clean
 
 ADD https://raw.githubusercontent.com/pypa/pip/701a80f451a62aadf4eeb21f371b45424821582b/contrib/get-pip.py /root/get-pip.py
+ADD . /stock
 RUN python3.4 /root/get-pip.py
 RUN pip3.4 install -U "setuptools==15.1"
 RUN pip3.4 install -U "pip"
@@ -38,6 +40,7 @@ RUN pip3.4 install -U "pymysql"
 
 COPY /src/sina_analysis.py /src/sina_service.py /src/tushare_wrapper.py ./stock/
 
+WORKDIR /stock
 
-CMD []
-ENTRYPOINT ["/usr/bin/python3.4"]
+CMD ["python3", "/stock/sina_service.py"]
+
