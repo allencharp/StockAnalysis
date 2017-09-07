@@ -28,3 +28,5 @@ class SinaAnalysis:
             rtn = rtn + str(item)[2:8] + "|"
         return rtn
 
+a = SinaAnalysis()
+print(a.GetSpecificDateStockUpData(date='2017-08-01'))

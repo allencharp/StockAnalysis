@@ -12,16 +12,5 @@ CREATE TABLE analysis
     date_time VARCHAR(20)
 );
 
-DROP TABLE IF EXISTS analysis_per_score;
-CREATE TABLE analysis_per_score
-(
-	item INT(11) PRIMARY KEY AUTO_INCREMENT,
-    organization NVARCHAR(100) NOT NULL,
-    analyst NVARCHAR(100) NOT NULL,
-    stock_code VARCHAR(10) NOT NULL,
-    date_time VARCHAR(20) NOT NULL,
-    tendays_value INT NULL
-)
-AS
-SELECT organization, analyst, stock_code,date_time
-FROM analysis GROUP BY organization, analyst,stock_code,date_time
+alter table analysis
+add column score_after_10 int NULL

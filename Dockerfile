@@ -42,5 +42,5 @@ COPY /src/sina_analysis.py /src/sina_service.py /src/tushare_wrapper.py ./stock/
 
 WORKDIR /stock
 
-CMD ["python3", "/stock/sina_service.py"]
+#CMD ["python3", "/stock/sina_service.py"]
 
